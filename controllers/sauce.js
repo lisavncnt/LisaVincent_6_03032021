@@ -83,27 +83,39 @@ exports.like = (req, res, next) => {
     (sauce) => {
       var likes = sauce.likes;
       var usersLiked = sauce.usersLiked;
-      if (like == 1) {
-        usersLiked.push(userId);
-        likes++;
+      var dislikes = sauce.dislikes;
+      var usersDisliked = sauce.usersDisliked;
+      
+      if (like == 1 && !usersLiked.includes(userId)) {
+          usersLiked.push(userId);
+          likes++;
+      } 
+
+      if (like == 0 ) {
+        if (usersLiked.includes(userId)) {
+          usersLiked.splice(userId);
+          likes--;
+        } else if (usersDisliked.includes(userId)) {
+          usersDisliked.splice(userId);
+          dislikes--;
+        }
       }
+
+      if (like == -1 && !usersDisliked.includes(userId)) {
+        usersDisliked.push(userId);
+        dislikes++;
+      }
+    
       Sauce.updateOne({
         _id: sauceId
       },
       {
-        dislikes: sauce.dislikes,
+        dislikes: dislikes,
         likes: likes,
-        usersDisliked: sauce.usersDisliked,
+        usersDisliked: usersDisliked,
         usersLiked: usersLiked
-      }).then(() => {res.status(200).json({message: 'like ok'})
-      .catch(error => res.status(400).json({ error }));
-    });
-    }
-  ).catch(
-    (error) => {
-      res.status(404).json({
-        error: error
-      });
-    }
-  );
+      }).then(() => { res.status(200).json({ message: 'Your like has been added successfully' })
+      }).catch((error) => { res.status(400).json({ error }) });
+    } 
+  ).catch((error) => { res.status(404).json({ error: error }); });
 };
