@@ -5,6 +5,8 @@ Bienvenue dans le backend de l'application So Pekocko !
 
 Pour le bon fonctionnnement de l'application veuillez suivre attentivement les instructions suivantes.
 
+> Avant toutes choses, veillez à installer **Node.js** sur votre ordinateur.
+
 ## Commencer par cloner le projet entier :
 
 - Cloner la partie **frontend** grâce au terminal de commande : 
